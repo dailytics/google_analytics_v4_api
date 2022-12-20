@@ -1,0 +1,21 @@
+PATH
+  remote: .
+  specs:
+    google_analytics_v4_api (0.0.1)
+
+GEM
+  remote: https://rubygems.org/
+  specs:
+    minitest (5.16.3)
+    rake (13.0.6)
+
+PLATFORMS
+  arm64-darwin-21
+
+DEPENDENCIES
+  google_analytics_v4_api!
+  minitest (~> 5.16.3)
+  rake (~> 13.0.6)
+
+BUNDLED WITH
+   2.3.26
