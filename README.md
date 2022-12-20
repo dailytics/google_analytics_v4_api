@@ -8,7 +8,20 @@ Add this gem to your Gemfile:
 gem 'google_analytics_v4_api'
 ```
 
-You will need a way to get a user's valid (and fresh) token (I personally use the `gem omnioauth`).
+You will need a way to get a user's valid (and fresh) token (I personally use the `gem omnioauth`), and then:
+
+```rb
+client = GoogleAnalyticsV4Api::Client.new(token)
+# List all the accounts
+client.accounts
+# Or get one particular account
+client.account("account/24696xxx")
+
+# List all the properties for a particular account
+client.properties("accounts/24596xxx")
+# Or get one particular property
+client.property("properties/33783xxx")
+```
 
 The rest is still being defined.
 
