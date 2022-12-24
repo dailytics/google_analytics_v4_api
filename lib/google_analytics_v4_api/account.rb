@@ -6,19 +6,24 @@ module GoogleAnalyticsV4Api
   class Account
     attr_accessor :name, :createTime, :updateTime, :displayName, :regionCode
 
-    def initialize(attributes = {})
+    def initialize(client, attributes = {})
+      @client = client
       attributes.each do |k, v|
         self.send("#{k}=", v)
       end
     end
 
     def properties
-
+      @client.properties(name)
     end
 
-    def self.parse_list(body)
+    def property(property_name)
+      @client.property(property_name)
+    end
+
+    def self.parse_list(client, body)
       JSON.parse(body)["accounts"].map do |attrs|
-        GoogleAnalyticsV4Api::Account.new(attrs)
+        GoogleAnalyticsV4Api::Account.new(client, attrs)
       end
     end
   end

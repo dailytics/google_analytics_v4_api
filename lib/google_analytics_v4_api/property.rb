@@ -6,20 +6,21 @@ module GoogleAnalyticsV4Api
   class Property
     attr_accessor :name, :propertyType, :createTime, :updateTime, :parent, :displayName, :industryCategory, :timeZone, :currencyCode, :serviceLevel, :deleteTime, :expireTime, :account
 
-    def initialize(attributes = {})
+    def initialize(client, attributes = {})
+      @client = client
       attributes.each do |k, v|
         self.send("#{k}=", v)
       end
     end
 
-    def self.parse_list(body)
+    def self.parse_list(client, body)
       JSON.parse(body)["properties"].map do |attrs|
-        GoogleAnalyticsV4Api::Property.new(attrs)
+        GoogleAnalyticsV4Api::Property.new(client, attrs)
       end
     end
 
-    def self.parse(body)
-      GoogleAnalyticsV4Api::Property.new(JSON.parse(body))
+    def self.parse(client, body)
+      GoogleAnalyticsV4Api::Property.new(client, JSON.parse(body))
     end
 
   end

@@ -1,6 +1,7 @@
 # Google Analytics v4 API Ruby Gem
 This is a simple wrapper to interact with the Google Analytics v4 API (currently in beta) with Ruby.
-It's based on the [API guide](https://developers.google.com/analytics/devguides/config/admin/v1/rest/v1beta)
+It's based on the [Admin API guide](https://developers.google.com/analytics/devguides/config/admin/v1/rest/v1beta) and the
+[Reports API guide](https://developers.google.com/analytics/devguides/reporting/data/v1/basics?authuser=1#report_response)
 
 ## Usage
 Add this gem to your Gemfile:
@@ -13,14 +14,19 @@ You will need a way to get a user's valid (and fresh) token (I personally use th
 ```rb
 client = GoogleAnalyticsV4Api::Client.new(token)
 # List all the accounts
-client.accounts
+accounts = client.accounts
 # Or get one particular account
-client.account("account/24696xxx")
+account = client.account("account/24696xxx")
 
 # List all the properties for a particular account
-client.properties("accounts/24596xxx")
+properties = client.properties("accounts/24596xxx")
 # Or get one particular property
-client.property("properties/33783xxx")
+property = client.property("properties/33783xxx")
+
+# Or simply call the properties for an Account object
+properties = account.properties
+# Or one particular property
+property = account.property("properties/33783xxx")
 ```
 
 The rest is still being defined.

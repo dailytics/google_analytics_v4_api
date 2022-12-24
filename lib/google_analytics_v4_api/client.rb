@@ -14,7 +14,7 @@ module GoogleAnalyticsV4Api
     end
 
     def accounts
-      @accounts ||= GoogleAnalyticsV4Api::Account.parse_list get("/accounts").body
+      @accounts ||= GoogleAnalyticsV4Api::Account.parse_list(self, get("/accounts").body)
     end
 
     def account(account_name)
@@ -22,7 +22,7 @@ module GoogleAnalyticsV4Api
     end
 
     def properties(account_name)
-      @properties ||= GoogleAnalyticsV4Api::Property.parse_list get("/properties", { filter: "parent:#{account_name}"}).body
+      @properties ||= GoogleAnalyticsV4Api::Property.parse_list(self, get("/properties", { filter: "parent:#{account_name}"}).body)
     end
 
     def property(property_name)
@@ -31,7 +31,7 @@ module GoogleAnalyticsV4Api
         return property unless property.nil?
       end
 
-      GoogleAnalyticsV4Api::Property.parse get("/#{property_name}").body
+      GoogleAnalyticsV4Api::Property.parse(self, get("/#{property_name}").body)
     end
 
     private
