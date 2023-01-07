@@ -13,6 +13,10 @@ module GoogleAnalyticsV4Api
       end
     end
 
+    def account
+      @client.account(parent)
+    end
+
     def self.parse_list(client, body)
       JSON.parse(body)["properties"].map do |attrs|
         GoogleAnalyticsV4Api::Property.new(client, attrs)
@@ -22,6 +26,5 @@ module GoogleAnalyticsV4Api
     def self.parse(client, body)
       GoogleAnalyticsV4Api::Property.new(client, JSON.parse(body))
     end
-
   end
 end
