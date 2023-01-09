@@ -1,6 +1,6 @@
 # Google Analytics v4 API Ruby Gem
 This is a simple wrapper to interact with the Google Analytics v4 API (currently in beta) with Ruby.
-It's based on the [Admin API guide](https://developers.google.com/analytics/devguides/config/admin/v1/rest/v1beta) and the
+It's based on the [Admin API guide](https://developers.google.com/analytics/devguides/config/admin/v1/rest) and the
 [Reports API guide](https://developers.google.com/analytics/devguides/reporting/data/v1/basics?authuser=1#report_response)
 
 ## Usage
@@ -11,12 +11,13 @@ gem 'google_analytics_v4_api'
 
 You will need a way to get a user's valid (and fresh) token (I personally use the `gem omnioauth`), and then:
 
+### Management API
 ```rb
 client = GoogleAnalyticsV4Api::Client.new(token)
 # List all the accounts
 accounts = client.accounts
 # Or get one particular account
-account = client.account("account/24696xxx")
+account = client.account("accounts/24696xxx")
 
 # List all the properties for a particular account
 properties = client.properties("accounts/24596xxx")
@@ -29,8 +30,60 @@ properties = account.properties
 property = account.property("properties/33783xxx")
 ```
 
-The rest is still being defined.
+### Data API
+```rb
+filter = {
+  "andGroup": {
+    "expressions": [
+      {
+        "filter": {
+          "fieldName": "countryId",
+          "stringFilter": {
+            "value": "CL"
+          }
+        }
+      },
+      {
+        "filter": {
+          "fieldName": "pagePath",
+          "stringFilter": {
+            "matchType": "CONTAINS",
+            "value": "events",
+            "caseSensitive": false
+          }
+        }
+      }
+    ]
+  }
+}
+report = GoogleAnalyticsV4Api::Report.new(
+          dimensions: ['pagePath', 'countryId'],
+          metrics: ['sessions', 'screenPageViews'],
+          dimension_filter: filter,
+          start_date: Date.today - 30, #optional, 30 days ago by default
+          end_date: Date.today - 1) #optional, today by default
 
+response = property.run_report(report)
+
+# Get raw data from the response
+response.raw_dimension_headers
+=> [{"name"=>"pagePath"}, {"name"=>"countryId"}]
+response.raw_metric_headers
+=> [{"name"=>"sessions", "type"=>"TYPE_INTEGER"}, {"name"=>"screenPageViews", "type"=>"TYPE_INTEGER"}]
+response.rows.first
+=> {"dimensionValues"=>[{"value"=>"/events"}, {"value"=>"CL"}], "metricValues"=>[{"value"=>"58"}, {"value"=>"78"}]}
+
+# Or get a simplified version of the response
+response.dimension_headers
+=> ["pagePath", "countryId"]
+response.metric_headers
+=> ["sessions", "screenPageViews"]
+response.parsed_rows.first.data
+=> {"pagePath"=>"/events", "countryId"=>"CL", "sessions"=>58, "screenPageViews"=>78}
+
+```
+Dimensions and Metrics are available [here](https://developers.google.com/analytics/devguides/reporting/data/v1/api-schema)
+Information about Filters is available [here](https://developers.google.com/analytics/devguides/reporting/data/v1/basics#dimension_filters)
 
 ## Development
 

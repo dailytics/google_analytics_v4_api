@@ -3,6 +3,8 @@
 module GoogleAnalyticsV4Api
   class Client
 
+    attr_accessor :access_token
+
     def initialize(access_token)
       @access_token = access_token
     end
