@@ -1,6 +1,6 @@
 # Google Analytics v4 API Ruby Gem
 This is a simple wrapper to interact with the Google Analytics v4 API (currently in beta) with Ruby.
-It's based on the [Admin API guide](https://developers.google.com/analytics/devguides/config/admin/v1/rest/v1beta) and the
+It's based on the [Admin API guide](https://developers.google.com/analytics/devguides/config/admin/v1/rest) and the
 [Reports API guide](https://developers.google.com/analytics/devguides/reporting/data/v1/basics?authuser=1#report_response)
 
 ## Usage
@@ -11,6 +11,7 @@ gem 'google_analytics_v4_api'
 
 You will need a way to get a user's valid (and fresh) token (I personally use the `gem omnioauth`), and then:
 
+### Managament API
 ```rb
 client = GoogleAnalyticsV4Api::Client.new(token)
 # List all the accounts
@@ -29,8 +30,39 @@ properties = account.properties
 property = account.property("properties/33783xxx")
 ```
 
-The rest is still being defined.
-
+### Data API
+```rb
+filter = {
+  "andGroup": {
+    "expressions": [
+      {
+        "filter": {
+          "fieldName": "countryId",
+          "stringFilter": {
+            "value": "CL"
+          }
+        }
+      },
+      {
+        "filter": {
+          "fieldName": "pagePath",
+          "stringFilter": {
+            "matchType": "CONTAINS",
+            "value": "events",
+            "caseSensitive": false
+          }
+        }
+      }
+    ]
+  }
+}
+report = GoogleAnalyticsV4Api::Report.new(dimensions: ['pagePath', 'countryId'], metrics: ['sessions', 'screenPageViews'], dimension_filter: filter)
+response = property.run_report(report)
+puts response.parsed_rows.first
+=> #<GoogleAnalyticsV4Api::ReportResponseRow:0x0000000107c2dcf8 @data={"pagePath"=>"/events", "countryId"=>"CL", "sessions"=>58, "screenPageViews"=>78}
+```
+Dimensions and Metrics are available [here](https://developers.google.com/analytics/devguides/reporting/data/v1/api-schema)
+Information about Filters is available [here](https://developers.google.com/analytics/devguides/reporting/data/v1/basics#dimension_filters)
 
 ## Development
 

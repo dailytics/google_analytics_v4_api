@@ -17,6 +17,11 @@ module GoogleAnalyticsV4Api
       @client.account(parent)
     end
 
+    def run_report(report)
+      response = Request.post(access_token: @client.access_token, path: "/#{name}:runReport", payload: report.to_json)
+      ReportResponse.new(response)
+    end
+
     def self.parse_list(client, body)
       JSON.parse(body)["properties"].map do |attrs|
         GoogleAnalyticsV4Api::Property.new(client, attrs)
