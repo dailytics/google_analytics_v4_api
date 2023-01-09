@@ -17,7 +17,7 @@ client = GoogleAnalyticsV4Api::Client.new(token)
 # List all the accounts
 accounts = client.accounts
 # Or get one particular account
-account = client.account("account/24696xxx")
+account = client.account("accounts/24696xxx")
 
 # List all the properties for a particular account
 properties = client.properties("accounts/24596xxx")
