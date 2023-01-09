@@ -56,10 +56,31 @@ filter = {
     ]
   }
 }
-report = GoogleAnalyticsV4Api::Report.new(dimensions: ['pagePath', 'countryId'], metrics: ['sessions', 'screenPageViews'], dimension_filter: filter)
+report = GoogleAnalyticsV4Api::Report.new(
+          dimensions: ['pagePath', 'countryId'],
+          metrics: ['sessions', 'screenPageViews'],
+          dimension_filter: filter,
+          start_date: Date.today - 30, #optional, 30 days ago by default
+          end_date: Date.today - 1) #optional, today by default
+
 response = property.run_report(report)
-puts response.parsed_rows.first
-=> #<GoogleAnalyticsV4Api::ReportResponseRow:0x0000000107c2dcf8 @data={"pagePath"=>"/events", "countryId"=>"CL", "sessions"=>58, "screenPageViews"=>78}
+
+# Get raw data from the response
+response.raw_dimension_headers
+=> [{"name"=>"pagePath"}, {"name"=>"countryId"}]
+response.raw_metric_headers
+=> [{"name"=>"sessions", "type"=>"TYPE_INTEGER"}, {"name"=>"screenPageViews", "type"=>"TYPE_INTEGER"}]
+response.rows.first
+=> {"dimensionValues"=>[{"value"=>"/events"}, {"value"=>"CL"}], "metricValues"=>[{"value"=>"58"}, {"value"=>"78"}]}
+
+# Or get a simplified version of the response
+response.dimension_headers
+=> ["pagePath", "countryId"]
+response.metric_headers
+=> ["sessions", "screenPageViews"]
+response.parsed_rows.first.data
+=> {"pagePath"=>"/events", "countryId"=>"CL", "sessions"=>58, "screenPageViews"=>78}
+
 ```
 Dimensions and Metrics are available [here](https://developers.google.com/analytics/devguides/reporting/data/v1/api-schema)
 Information about Filters is available [here](https://developers.google.com/analytics/devguides/reporting/data/v1/basics#dimension_filters)

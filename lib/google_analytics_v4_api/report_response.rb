@@ -6,16 +6,24 @@ require 'date'
 module GoogleAnalyticsV4Api
   class ReportResponse
 
+    attr_accessor :body, :raw_dimension_headers, :raw_metric_headers, :rows, :row_count, :metadata, :kind
+
     def initialize(body)
-      @raw_body = JSON.parse body
-      @raw_dimension_headers = @raw_body["dimensionHeaders"]
-      @dimension_headers = @raw_dimension_headers.map { |header| header["name"] }
-      @raw_metric_headers = @raw_body["metricHeaders"]
-      @metric_headers = @raw_metric_headers.map { |header| header["name"] }
-      @rows = @raw_body["rows"]
-      @row_cont = @raw_body["rowCount"]
-      @metadata = @raw_body["metadata"]
-      @kind = @raw_body["kind"]
+      @body = JSON.parse body
+      @raw_dimension_headers = @body["dimensionHeaders"]
+      @raw_metric_headers = @body["metricHeaders"]
+      @rows = @body["rows"]
+      @row_cont = @body["rowCount"]
+      @metadata = @body["metadata"]
+      @kind = @body["kind"]
+    end
+
+    def dimension_headers
+      @dimension_headers ||= @raw_dimension_headers.map { |header| header["name"] }
+    end
+
+    def metric_headers
+      @metric_headers ||= @raw_metric_headers.map { |header| header["name"] }
     end
 
     def parsed_rows
