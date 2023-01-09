@@ -11,7 +11,7 @@ gem 'google_analytics_v4_api'
 
 You will need a way to get a user's valid (and fresh) token (I personally use the `gem omnioauth`), and then:
 
-### Managament API
+### Management API
 ```rb
 client = GoogleAnalyticsV4Api::Client.new(token)
 # List all the accounts
