@@ -12,8 +12,8 @@ module GoogleAnalyticsV4Api
       @body = JSON.parse body
       @raw_dimension_headers = @body["dimensionHeaders"]
       @raw_metric_headers = @body["metricHeaders"]
-      @rows = @body["rows"]
-      @row_cont = @body["rowCount"]
+      @rows = @body["rows"] || []
+      @row_cont = @body["rowCount"] || 0
       @metadata = @body["metadata"]
       @kind = @body["kind"]
     end
