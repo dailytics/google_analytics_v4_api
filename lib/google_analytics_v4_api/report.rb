@@ -16,10 +16,10 @@ module GoogleAnalyticsV4Api
 
     def to_json
       output = {}
-      output[:dateRanges] = @date_ranges if @date_ranges
-      output[:dimensions] = @dimensions if @dimensions.any?
-      output[:metrics] = @metrics if @metrics.any?
-      output[:dimensionFilter] = @dimension_filter if @dimension_filter.any?
+      output[:dateRanges] = @date_ranges
+      output[:dimensions] = @dimensions if !@dimensions.nil? && @dimensions.any?
+      output[:metrics] = @metrics if !@metrics.nil? && @metrics.any?
+      output[:dimensionFilter] = @dimension_filter if !@dimension_filter.nil? && @dimension_filter.any?
       output.to_json
     end
   end
