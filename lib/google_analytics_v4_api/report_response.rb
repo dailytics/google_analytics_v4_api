@@ -10,8 +10,8 @@ module GoogleAnalyticsV4Api
 
     def initialize(body)
       @body = JSON.parse body
-      @raw_dimension_headers = @body["dimensionHeaders"]
-      @raw_metric_headers = @body["metricHeaders"]
+      @raw_dimension_headers = @body["dimensionHeaders"] || []
+      @raw_metric_headers = @body["metricHeaders"] || []
       @rows = @body["rows"] || []
       @row_cont = @body["rowCount"] || 0
       @metadata = @body["metadata"]
