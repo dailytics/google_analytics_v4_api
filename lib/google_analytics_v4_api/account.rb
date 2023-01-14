@@ -22,7 +22,10 @@ module GoogleAnalyticsV4Api
     end
 
     def self.parse_list(client, body)
-      JSON.parse(body)["accounts"].map do |attrs|
+      parsed_body = JSON.parse(body)
+      return [] if parsed_body["accounts"].nil?
+
+      parsed_body["accounts"].map do |attrs|
         GoogleAnalyticsV4Api::Account.new(client, attrs)
       end
     end
