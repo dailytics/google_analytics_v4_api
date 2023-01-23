@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    google_analytics_v4_api (0.0.7)
+    google_analytics_v4_api (0.0.8)
 
 GEM
   remote: https://rubygems.org/
