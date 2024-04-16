@@ -1,15 +1,15 @@
 # frozen_string_literal: true
 
-require 'json'
+require "json"
 
 module GoogleAnalyticsV4Api
   class Property
-    attr_accessor :name, :propertyType, :createTime, :updateTime, :parent, :displayName, :industryCategory, :timeZone, :currencyCode, :serviceLevel, :deleteTime, :expireTime, :account
+    attr_accessor :name, :propertyType, :createTime, :updateTime, :parent, :displayName, :industryCategory, :timeZone, :currencyCode, :serviceLevel, :deleteTime, :expireTime
 
     def initialize(client, attributes = {})
       @client = client
       attributes.each do |k, v|
-        self.send("#{k}=", v)
+        send("#{k}=", v) if self.respond_to?("#{k}=")
       end
     end
 
