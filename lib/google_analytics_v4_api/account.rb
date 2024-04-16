@@ -9,7 +9,7 @@ module GoogleAnalyticsV4Api
     def initialize(client, attributes = {})
       @client = client
       attributes.each do |k, v|
-        self.send("#{k}=", v)
+        self.send("#{k}=", v) if self.respond_to?("#{k}=")
       end
     end
 
